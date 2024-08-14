@@ -7,21 +7,18 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-
-  // Trier les événements par date décroissante
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtB.date) - new Date(evtA.date)
+    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
-
   const nextCard = () => {
-    setIndex(prevIndex => (prevIndex + 1) % byDateDesc.length);
+    setTimeout(
+      () => setIndex(index + 1 < byDateDesc.length ? index + 1 : 0),
+      5000
+    );
   };
-
   useEffect(() => {
-    const interval = setInterval(nextCard, 5000);
-    return () => clearInterval(interval);
-  }, [byDateDesc?.length]);
-
+    nextCard();
+  });
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
